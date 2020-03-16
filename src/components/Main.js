@@ -22,7 +22,7 @@ class Main extends Component {
 	constructor(props) {
 	    super(props);
 	    this.state = {
-			active: 'explore',
+			active: '',
 		}
 	}
 
@@ -37,6 +37,7 @@ class Main extends Component {
 				<ThemeProvider theme={theme}>
 					<Switch>
 						<Route exact={true} path="/"><Explore/></Route>
+						<Route path="/store"><NewListing/></Route>
 						<Route path="/me"><Me/></Route>
 						<Route path="/news"><Notifications/></Route>
 					</Switch>

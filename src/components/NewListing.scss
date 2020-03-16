@@ -1,0 +1,145 @@
+.newListing {
+	background-color: #fff;
+	height: 100%;
+
+	.navbar {
+		border-bottom: 1px solid #C2C2C2;
+		padding: 40px 0px 5px;
+		display: flex;
+		flex-direction: row;
+	}
+
+	.left {
+		width: 15%;
+	}
+
+	.right {
+		width: 15%;
+	}
+
+	.center {
+		text-align: center;
+		width: 70%;
+	}
+
+	button {
+		font-weight: bold;
+		color: #FFCD1D;
+	}
+
+	.listingPage {
+		padding: 10px;
+	}
+
+	.paragraph {
+		font-size: 14pt;
+		padding: 10px 0;
+	}
+
+	.images {
+		display: flex;
+	  	overflow-x: auto;
+	}
+
+	.images::-webkit-scrollbar {
+		display: none;
+	}
+
+	.imgPreviewContainer {
+		height: 200px;
+		box-sizing: border-box;
+		min-width: 100px;
+		max-width: 100px;
+		border: 1px solid #C2C2C2;
+		border-radius: 5px;
+		display: flex;
+	    justify-content: center;
+	    align-items: center;
+	    overflow: hidden;
+	    margin-right: 5px;
+	    position: relative;
+	}
+
+	.imgPreview {
+		flex-shrink: 0;
+	    height: 100%
+	}
+
+	.removeImg {
+	   font-weight: bold;
+	   font-size: 14pt;
+	   position: absolute;
+	   top: 5px;
+	   right: 7px;
+	}
+
+	.uploadInput {
+		display: none;
+	}
+
+	.uploadButton {
+		color: #828282;
+	}
+
+	.fieldContainer {
+		width: 100%;
+		display: flex;
+		margin: 10px 0;
+
+		.field {
+			border: 1px solid #C2C2C2;
+			border-radius: 5px;
+			padding: 15px 10px;
+			font-size: 15px;
+		}
+
+		.text {
+			flex-grow: 1;
+		}
+
+		.number {
+			/*flex-grow: 0.5;*/
+		}
+
+		.boxHelper {
+			flex-grow: 2;
+			padding: 5px 10px;
+
+			.boxTitle {
+				font-size: 18pt;
+				margin-bottom: 5px
+			}
+
+			.boxDimension {
+				font-size: 12pt;
+			}
+		}
+	}
+
+	.bottomContainer {
+		width: 100%;
+		/*display: flex;*/
+		position: fixed;
+		bottom: 0;
+		padding: 15px;
+		box-shadow: 0 -4px 4px rgba(0, 0, 0, 0.1);
+
+		.bottomButton {
+			color: #000;
+			font-size: 14pt;
+			padding: 14px 50px;
+			border-radius: 5px;
+			float: right;
+			border: 0;
+			margin-right: 30px;
+		}
+
+		.primaryButton {
+			background-color: #FFCD1D;
+		}
+
+		.secondaryButton {
+			background-color: #E5E5E5;
+		}
+	}
+}

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 
-import { Link , withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 
-import { makeStyles, createStyles, withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 import AddBoxIcon from '@material-ui/icons/AddBox';
@@ -23,7 +23,7 @@ class Nav extends Component {
 	constructor(props) {
 	    super(props);
 	    this.state = {
-			value: 'explore',
+			value: '',
 		}
 	}
 
@@ -35,9 +35,12 @@ class Nav extends Component {
  	render() {
  		const { classes } = this.props;
 
+ 		const {pathname} = this.props.location;
+ 		const pathnameWithoutSlash = pathname.substring(1);
+
  		return (
-			<BottomNavigation value={this.state.value} onChange={this.handleChange} className={classes.root} >
-				<BottomNavigationAction label="Explore" value="explore" icon={<SearchIcon />} />
+			<BottomNavigation value={pathnameWithoutSlash} onChange={this.handleChange} className={classes.root} >
+				<BottomNavigationAction label="Explore" value="" icon={<SearchIcon />} />
 		
 				<BottomNavigationAction label="Store" value="store" icon={<AddBoxIcon />} />
 		
