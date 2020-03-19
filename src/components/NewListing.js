@@ -1,19 +1,17 @@
 import React , { Component } from 'react';
 
 import { withStyles } from '@material-ui/core/styles';
-import Modal from '@material-ui/core/Modal';
-import Backdrop from '@material-ui/core/Backdrop';
-import Slide from '@material-ui/core/Slide';
 import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 
-import './NewListing.scss'
+import CustomModal from './CustomModal.js';
 
-const styles = theme => ({
-	root: {
-		
-	},
-});
+import './NewListing.scss';
+
+const PROD_DOMAIN = "http://bizu-env2.eba-jmm3xad3.us-west-2.elasticbeanstalk.com/";
+const DEV_DOMAIN = "http://127.0.0.1:8000/";
+
+const DOMAIN = DEV_DOMAIN;
 
 class NewListingP1 extends Component {
 
@@ -36,7 +34,7 @@ class NewListingP1 extends Component {
   		fd.append("image", e.target.files[0], e.target.files[0].name);
   		fd.append("listing", values.id);
 
-  		axios.post("http://bizu-env2.eba-jmm3xad3.us-west-2.elasticbeanstalk.com/listing_pictures/", fd, {
+  		axios.post(`${DOMAIN}listing_pictures/`, fd, {
 	      onUploadProgress: progressEvent => {
 	        console.log("upload progress " + Math.round((progressEvent.loaded / progressEvent.total)*100) + "%");
 	      }
@@ -51,7 +49,7 @@ class NewListingP1 extends Component {
     	const { files, pictureIds } = this.state;
     	const pictureId = pictureIds[index];
 
-    	axios.delete(`http://bizu-env2.eba-jmm3xad3.us-west-2.elasticbeanstalk.com/listing_pictures/${pictureId}/`)
+    	axios.delete(`${DOMAIN}${pictureId}/`)
     		.then(res => {
     			console.log(res);
     			// TODO: state stuff
@@ -131,8 +129,7 @@ class NewListingP2 extends Component {
             		type="number"
             		placeholder="0"
             		className="number field"
-            		onChange={handleChange('largeBoxes')}
-            		defaultValue={values.large}/>
+            		onChange={handleChange('largeBoxes')}/>
             	<div className="boxHelper">
             		<div className="boxTitle">Large Boxes</div>
         			<div className="boxDimension">18'' x 18'' x 24''</div>
@@ -144,8 +141,7 @@ class NewListingP2 extends Component {
             		type="number"
             		placeholder="0"
             		className="number field"
-            		onChange={handleChange('mediumBoxes')}
-            		defaultValue={values.mediumBoxes}/>
+            		onChange={handleChange('mediumBoxes')}/>
             	<div className="boxHelper">
             		<div className="boxTitle">Medium Boxes</div>
         			<div className="boxDimension">18'' x 18'' x 16''</div>
@@ -157,8 +153,7 @@ class NewListingP2 extends Component {
             		type="number"
             		placeholder="0"
             		className="number field"
-            		onChange={handleChange('smallBoxes')}
-            		defaultValue={values.smallBoxes}/>
+            		onChange={handleChange('smallBoxes')}/>
             	<div className="boxHelper">
             		<div className="boxTitle">Small Boxes</div>
         			<div className="boxDimension">16'' x 16'' x 12''</div>
@@ -184,7 +179,48 @@ class NewListingP2 extends Component {
 
 class NewListingP3 extends Component {
 	render() {
-		return (<div>P3</div>);
+		const { values } = this.props;
+
+		let msgArray = [];
+
+		if (values.smallBoxes > 0) {
+			msgArray.push(`${values.smallBoxes} Small Boxes`);
+		}
+
+		if (values.mediumBoxes > 0) {
+			msgArray.push(`${values.mediumBoxes} Medium Boxes`);
+		}
+
+		if (values.largeBoxes > 0) {
+			msgArray.push(`${values.largeBoxes} Large Boxes`);
+		}
+
+		let msg;
+		if (msgArray.length === 0) {
+			msg = 'no boxes';
+		} else {
+			msg = `${msgArray[msgArray.length - 1]}`;
+			
+			if (msgArray.length - 1 > 0) {
+				msg = `${msgArray[msgArray.length - 2]} and ${msg}`;
+			}
+
+			if (msgArray.length - 2 > 0) {
+				msg = `${msgArray[msgArray.length - 3]}, ${msg}`;
+			}
+		}
+
+		return (<div className="listingPage">
+			<div className="h1">
+				Sweet, you've just listed <b>{values.title}</b> along with {msg}.
+			</div>
+
+			<div className="h2">
+				<b>Next steps:</b><br/>
+				When someone is ready to store your things, they will reach out to you in one of the channels bellow. Make sure these are updated by going to the <b>Me</b> tab.
+			</div>
+
+		</div>);
 	}
 }
 
@@ -208,7 +244,7 @@ class NewListing extends Component {
 
 	componentDidMount() {
 		// TODO: check if success
-		axios.post("http://bizu-env2.eba-jmm3xad3.us-west-2.elasticbeanstalk.com/listings/", { })
+		axios.post(`${DOMAIN}listings/`, { })
 		    .then(res => {
 				 console.log(res);
 				 console.log(res.data.id);
@@ -218,7 +254,6 @@ class NewListing extends Component {
 
 	handleOpen = () => {
 		this.setState({open: true});
-		console.log('called');
 	};
 
 	handleClose = () => {
@@ -226,7 +261,7 @@ class NewListing extends Component {
 
 		if (step < 3) {
 			if (id !== null) {
-				axios.delete(`http://bizu-env2.eba-jmm3xad3.us-west-2.elasticbeanstalk.com/listings/${id}/`);
+				axios.delete(`${DOMAIN}listings/${id}/`);
 			}
 		}
 
@@ -235,14 +270,13 @@ class NewListing extends Component {
 	};
 
 	handleChange = input => e => {
-		console.log(input);
 		this.setState({ [input]: e.target.value });
 	}
 
 	handleSubmit = () => {
 		const { id, title, description, smallBoxes, mediumBoxes, largeBoxes, other } = this.state;
 
-		axios.put(`http://bizu-env2.eba-jmm3xad3.us-west-2.elasticbeanstalk.com/listings/${id}/`, {
+		axios.put(`${DOMAIN}listings/${id}/`, {
 			title: title,
 			description: description,
 			small_boxes: smallBoxes,
@@ -282,23 +316,12 @@ class NewListing extends Component {
 	}
 
 	render() {
-		const { classes } = this.props;
-
 		return (
 		<div>
-			<Modal
-		        aria-labelledby="transition-modal-title"
-		        aria-describedby="transition-modal-description"
-		        className={classes.modal}
+			<CustomModal
 		        open={this.state.open}
 		        onClose={this.handleClose}
-		        closeAfterTransition
-		        BackdropComponent={Backdrop}
-		        BackdropProps={{
-		          timeout: 500,
-		        }}
 		      >
-		        <Slide direction="up" in={this.state.open}>
 		          <div className="newListing">
 		          	{this.state.step < 3 ? 
 			          	<div className="navbar">
@@ -343,11 +366,10 @@ class NewListing extends Component {
 		          	}
 
 		          </div>
-		        </Slide>
-		    </Modal>
+		    </CustomModal>
 		</div>
 		);
 	}
 }
 
-export default withRouter(withStyles(styles, { withTheme: true })(NewListing));
+export default withRouter(withStyles({ }, { withTheme: true })(NewListing));

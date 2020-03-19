@@ -1,0 +1,30 @@
+.bottomContainer {
+	width: 100%;
+	position: fixed;
+	bottom: 0;
+	padding: 15px;
+	box-shadow: 0 -4px 4px rgba(0, 0, 0, 0.1);
+
+	.bottomButton {
+		color: #000;
+		font-size: 14pt;
+		font-weight: bold;
+		padding: 14px 50px;
+		border-radius: 5px;
+		float: right;
+		border: 0;
+		margin-right: 30px;
+	}
+
+	.primaryButton {
+		background-color: #FFCD1D;
+	}
+
+	.secondaryButton {
+		background-color: #E5E5E5;
+	}
+}
+
+.displayLinebreak {
+  white-space: pre-line;
+}

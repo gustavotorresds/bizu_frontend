@@ -116,30 +116,13 @@
 		}
 	}
 
-	.bottomContainer {
-		width: 100%;
-		/*display: flex;*/
-		position: fixed;
-		bottom: 0;
-		padding: 15px;
-		box-shadow: 0 -4px 4px rgba(0, 0, 0, 0.1);
+	.h1 {
+		margin-top: 120px;
+		font-size: 26pt;
+	}
 
-		.bottomButton {
-			color: #000;
-			font-size: 14pt;
-			padding: 14px 50px;
-			border-radius: 5px;
-			float: right;
-			border: 0;
-			margin-right: 30px;
-		}
-
-		.primaryButton {
-			background-color: #FFCD1D;
-		}
-
-		.secondaryButton {
-			background-color: #E5E5E5;
-		}
+	.h2 {
+		margin-top: 60px;
+		font-size: 16pt;
 	}
 }

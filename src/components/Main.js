@@ -11,10 +11,12 @@ import Nav from './Nav';
 import NewListing from './NewListing';
 import Notifications from './Notifications';
 
+import './Main.scss';
+
 const theme = createMuiTheme({
   palette: {
     // primary: { main: yellow[500], dark: yellow[700] }, // #ffb300 (not sure this is the best. Specially for others)
-    primary: { main: yellow[700] },
+    primary: { main: yellow[700] },	
   },
 });
 
@@ -36,7 +38,7 @@ class Main extends Component {
 			<Router>
 				<ThemeProvider theme={theme}>
 					<Switch>
-						<Route exact={true} path="/"><Explore/></Route>
+						<Route exact path={["/", "/listings/", "/listings/:id/"]} ><Explore/></Route>
 						<Route path="/store"><NewListing/></Route>
 						<Route path="/me"><Me/></Route>
 						<Route path="/news"><Notifications/></Route>
