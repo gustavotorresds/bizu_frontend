@@ -6,12 +6,10 @@ import axios from 'axios';
 
 import CustomModal from './CustomModal.js';
 
+import { DOMAIN } from './Constants.js';
+
 import './NewListing.scss';
 
-const PROD_DOMAIN = "http://bizu-env2.eba-jmm3xad3.us-west-2.elasticbeanstalk.com/";
-const DEV_DOMAIN = "http://127.0.0.1:8000/";
-
-const DOMAIN = DEV_DOMAIN;
 
 class NewListingP1 extends Component {
 
