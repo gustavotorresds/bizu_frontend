@@ -35,6 +35,8 @@ class Nav extends Component {
  	render() {
  		const { classes } = this.props;
 
+ 		const token = localStorage.getItem('token') || null;
+
  		const {pathname} = this.props.location;
  		const pathnameWithoutSlash = pathname.substring(1);
 
@@ -43,10 +45,20 @@ class Nav extends Component {
 				<BottomNavigationAction label="Explore" value="" icon={<SearchIcon />} />
 		
 				<BottomNavigationAction label="Store" value="store" icon={<AddBoxIcon />} />
-		
-				<BottomNavigationAction label="News" value="news" icon={<NotificationsIcon />} />
 
-				<BottomNavigationAction label="Me" value="me" icon={<PersonIcon />} />
+				{token ?
+					<BottomNavigationAction label="News" value="news" icon={<NotificationsIcon />} />
+					:
+					null
+				}
+
+				{token ? 
+					<BottomNavigationAction label="Me" value="me" icon={<PersonIcon />}/>
+					:
+					<BottomNavigationAction label="Log In" value="auth" icon={<PersonIcon />} />
+				}
+		
+				
 			</BottomNavigation>
 		);
  	}

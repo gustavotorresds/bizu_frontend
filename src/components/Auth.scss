@@ -1,0 +1,47 @@
+.auth {
+	padding: 10px;
+	width: 100%;
+
+	.tabs {
+		margin-bottom: 30px;
+	}
+
+	.login {
+		
+	}
+
+
+	.fieldContainer {
+		width: 100%;
+		display: flex;
+
+		.field {
+			border: 1px solid #828282;
+			padding: 15px 20px;
+			width: 100%;
+			font-size: 14pt;
+			border-radius: 8px;	
+		}
+
+		input[type="checkbox"] {
+			-webkit-appearance: checkbox;
+		}
+
+		.topField {
+			border-radius: 8px 8px 0 0;
+			border-bottom: 0;
+		}
+
+		.bottomField {
+			border-radius: 0 0 8px 8px;
+		}
+	}
+
+	.submitButton {
+		width: 100%;
+		padding: 10px 0;
+		font-size: 12pt;
+		border: none;
+		border-radius: 5px;
+	}
+}

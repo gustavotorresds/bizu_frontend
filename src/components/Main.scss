@@ -15,16 +15,40 @@
 		border: 0;
 		margin-right: 30px;
 	}
+}
 
-	.primaryButton {
-		background-color: #FFCD1D;
-	}
+.primaryButton {
+	background-color: #FFCD1D;
+}
 
-	.secondaryButton {
-		background-color: #E5E5E5;
-	}
+.secondaryButton {
+	background-color: #E5E5E5;
 }
 
 .displayLinebreak {
   white-space: pre-line;
+}
+
+.h1 {
+	font-size: 26pt;
+}
+
+.h2 {
+	font-size: 16pt;
+}
+
+.paragraph {
+	font-size: 16pt;
+}
+
+.paragraphS {
+	font-size: 14pt;
+}
+
+.mt15 {
+	margin-top: 15px;
+}
+
+.mt30 {
+	margin-top: 30px;
 }

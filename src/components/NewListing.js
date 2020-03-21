@@ -2,7 +2,7 @@ import React , { Component } from 'react';
 
 import { withStyles } from '@material-ui/core/styles';
 import { withRouter } from 'react-router-dom';
-import axios from 'axios';
+import requester from './Requester.js';
 
 import CustomModal from './CustomModal.js';
 
@@ -32,7 +32,7 @@ class NewListingP1 extends Component {
   		fd.append("image", e.target.files[0], e.target.files[0].name);
   		fd.append("listing", values.id);
 
-  		axios.post(`${DOMAIN}listing_pictures/`, fd, {
+  		requester.post('listing_pictures/', fd, {
 	      onUploadProgress: progressEvent => {
 	        console.log("upload progress " + Math.round((progressEvent.loaded / progressEvent.total)*100) + "%");
 	      }
@@ -47,7 +47,7 @@ class NewListingP1 extends Component {
     	const { files, pictureIds } = this.state;
     	const pictureId = pictureIds[index];
 
-    	axios.delete(`${DOMAIN}${pictureId}/`)
+    	requester.delete(`${pictureId}/`)
     		.then(res => {
     			console.log(res);
     			// TODO: state stuff
@@ -242,7 +242,7 @@ class NewListing extends Component {
 
 	componentDidMount() {
 		// TODO: check if success
-		axios.post(`${DOMAIN}listings/`, { })
+		requester.post(`listings/`, { })
 		    .then(res => {
 				 console.log(res);
 				 console.log(res.data.id);
@@ -259,7 +259,7 @@ class NewListing extends Component {
 
 		if (step < 3) {
 			if (id !== null) {
-				axios.delete(`${DOMAIN}listings/${id}/`);
+				requester.delete(`listings/${id}/`);
 			}
 		}
 
@@ -274,7 +274,7 @@ class NewListing extends Component {
 	handleSubmit = () => {
 		const { id, title, description, smallBoxes, mediumBoxes, largeBoxes, other } = this.state;
 
-		axios.put(`${DOMAIN}listings/${id}/`, {
+		requester.put(`listings/${id}/`, {
 			title: title,
 			description: description,
 			small_boxes: smallBoxes,

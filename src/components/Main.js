@@ -5,6 +5,7 @@ import { BrowserRouter as Router , Route, Switch } from 'react-router-dom';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { yellow } from '@material-ui/core/colors';
 
+import Auth from './Auth'
 import Explore from './Explore';
 import Me from './Me';
 import Nav from './Nav';
@@ -24,12 +25,8 @@ class Main extends Component {
 	constructor(props) {
 	    super(props);
 	    this.state = {
-			active: '',
+	    	
 		}
-	}
-
-	setActive(newActive) {
-		this.setState({active: newActive});
 	}
 
 	render() {
@@ -42,8 +39,9 @@ class Main extends Component {
 						<Route path="/store"><NewListing/></Route>
 						<Route path="/me"><Me/></Route>
 						<Route path="/news"><Notifications/></Route>
+						<Route path="/auth"><Auth/></Route>
 					</Switch>
-					<Nav setActive={this.setActive}/>
+					<Nav />
 				</ThemeProvider>
 			</Router>
 		);
