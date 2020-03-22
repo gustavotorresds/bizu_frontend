@@ -51,8 +51,8 @@ class ContactInfo extends Component {
 						<div className="field">{userInfo.email}</div>
 						<div className="field">
 							<a className="socialLink" href={userInfo.profile.facebook} target="_blank">Facebook</a>
-							|
-							<a className="socialLink" href={userInfo.profile.Linkedin} target="_blank">Linkedin</a>
+							<span className="divisor">|</span>
+							<a className="socialLink" href={userInfo.profile.linkedin} target="_blank">Linkedin</a>
 						</div>
 					</div>
 				</div>

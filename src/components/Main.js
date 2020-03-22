@@ -35,7 +35,7 @@ class Main extends Component {
 			<Router>
 				<ThemeProvider theme={theme}>
 					<Switch>
-						<Route exact path={["/", "/listings/", "/listings/:id/"]} ><Explore/></Route>
+						<Route exact path={["/", "/listings/", "/listings/:id/"]} ><Explore filters={{owner: 1}}/></Route>
 						<Route path="/store"><NewListing/></Route>
 						<Route path="/me"><Me/></Route>
 						<Route path="/news"><Notifications/></Route>

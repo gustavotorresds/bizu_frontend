@@ -1,0 +1,75 @@
+.me {
+	padding: 50px 20px;
+
+	.header {
+		display: flex;
+
+		.leftCol {
+			flex-grow: 0.2;
+		}
+
+		.rightCol {
+			flex-grow: 1;
+		}
+
+		.iconContainer {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			width: 60px;
+			height: 60px;
+			border-radius: 50%;
+			background-color: #C4C4C4;
+		}
+
+		.name {
+			font-size: 18pt;
+			margin-bottom: 6px;
+		}
+
+		.field {
+			font-size: 11pt;
+			margin-bottom: 10px;
+			color: #828282;
+		}
+
+		.rating {
+			display: flex;
+			align-items: center;
+			font-size: 14pt;
+
+			.star {
+				color: #FFCD1D;
+				font-size: 22pt;
+				text-shadow: 0 0 10px #000;
+				margin-left: 3px;
+			}
+
+			.star path {
+				stroke: #828282;
+  				stroke-width: 1px;
+			}
+		}
+
+		.icon {
+			font-size: 30pt;
+		}
+	}
+
+
+	.editButton {
+		width: 100%;
+		background-color: white;
+		border: 1px solid #C2C2C2;
+		border-radius: 3px;
+		padding: 6px 0;
+		margin-top: 18px;
+		font-size: 11pt;
+	}
+
+	.verticalDivisor {
+		width: calc(100% + 40px);
+		margin: 10px -20px;
+		border: 1px solid #E5E5E5;
+	}
+}

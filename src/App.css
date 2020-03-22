@@ -1,6 +1,7 @@
 * {
 	box-sizing: border-box;
-	-webkit-appearance: none
+	-webkit-appearance: none;
+	font-family: 'Lato', sans-serif;
 }
 
 a {
