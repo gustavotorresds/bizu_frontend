@@ -1,0 +1,34 @@
+.contactInfo {
+	display: flex;
+	margin-top: 40px;
+
+	.leftCol {
+		flex-grow: 0.1;
+
+		.iconContainer {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			width: 40px;
+			height: 40px;
+			border-radius: 50%;
+			background-color: #C4C4C4;
+		}
+	}
+
+	.rightCol {
+		margin-top: 10px;
+		flex-grow: 1;
+
+
+		.field {
+			margin-bottom: 20px;
+		}
+
+		.socialLink {
+			color: #1890FF;
+			padding: 0 5px;
+			text-decoration: underline;
+		}
+	}
+}

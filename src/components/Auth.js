@@ -6,7 +6,7 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import { withRouter } from 'react-router-dom';
 
-import requester from './Requester.js';
+import requester, { resetToken } from './Requester.js';
 import './Auth.scss';
 
 const useStyles = makeStyles({
@@ -32,7 +32,7 @@ class LogIn extends Component {
 			})
 			.then(res => {
 				console.log(res.data);
-				localStorage.setItem('token', res.data.token);
+				resetToken(res.data.token);
 				this.props.history.push('/');
 			});
 	}
@@ -102,7 +102,7 @@ class SignUp extends Component {
 			.post('register/', data)
 			.then(res => {
 				console.log(res.data);
-				localStorage.setItem('token', res.data.token);
+				resetToken(res.data.token);
 				this.props.history.push('/');
 			});
 	}

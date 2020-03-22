@@ -10,6 +10,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Route, Link } from 'react-router-dom';
 
 import CustomModal from './CustomModal.js';
+import ContactInfo from './ContactInfo.js';
 
 import { DOMAIN } from './Constants.js';
 
@@ -61,6 +62,8 @@ class ListingP1 extends Component {
 			        <div className="description displayLinebreak">
 			        	{info.description}
 			        </div>
+
+			        <ContactInfo userId={info.owner} />
 		        </div>
 
 		        <div className="bottomContainer">
@@ -101,9 +104,7 @@ class ListingP2 extends Component {
 			        To coordinate the pick-up, reach out to the owner bellow.
 			        </div>
 
-			        {
-			        	// TODO: CONTACT INFO
-			        }
+			        <ContactInfo userId={info.owner} />
 
 			        <div className="paragraph mt30">
 			        Here's an example message that you can copy-paste to send them:
