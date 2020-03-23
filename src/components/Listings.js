@@ -6,6 +6,8 @@ import Grid from '@material-ui/core/Grid';
 import requester from './Requester.js';
 import { Route, Link } from 'react-router-dom';
 
+
+import EditListing from './EditListing';
 import Listing from './Listing.js';
 
 import './Listings.scss';
@@ -79,7 +81,7 @@ class Listings extends Component {
 						{listings.map((listing, index) => {
 							return (
 								<Grid item xs={12} key={index}>
-									<Link to={`/listings/${listing.id}`}>
+									<Link to={`/listings/${listing.id}/`}>
 										<div
 											className="listing"
 											onClick={ () => {
@@ -98,6 +100,8 @@ class Listings extends Component {
 				</div>
 
 				<Route path={'/listings/:id/'} component={Listing}/>
+
+				<Route path={'/listings/:id/edit/'} component={EditListing}/>
 			</div>
 		);
 	}

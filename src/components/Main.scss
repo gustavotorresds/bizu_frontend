@@ -1,3 +1,8 @@
+button {
+	border: none;
+	background: none;
+}
+
 .bottomContainer {
 	background-color: #fff;
 	width: 100%;
@@ -71,4 +76,33 @@
 	padding: 6px 0;
 	margin-top: 18px;
 	font-size: 11pt;
+}
+
+.topNavbar {
+	border-bottom: 1px solid #C2C2C2;
+	padding: 40px 0px 5px;
+	display: flex;
+	flex-direction: row;
+
+	.left {
+		width: 15%;
+	}
+
+	.right {
+		width: 15%;
+	}
+
+	.center {
+		text-align: center;
+		width: 70%;
+	}
+
+	button {
+		color: #FFCD1D;
+	}
+}
+
+.verticalDivisor {
+	width: 100%;
+	border: 1px solid #E5E5E5;
 }

@@ -7,6 +7,7 @@ import requester from './Requester.js';
 import { Route, Link } from 'react-router-dom';
 
 import Listings from './Listings.js';
+import { LISTING_STATUS } from './Constants.js';
 
 import './Explore.scss';
 
@@ -20,7 +21,7 @@ class Explore extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-
+			searchQuery: '',
 		}
 	}
 
@@ -32,10 +33,13 @@ class Explore extends Component {
 						className="searchBar"
 						type="text"
 						placeholder="Find things you want"
+						onChange={(event) => {
+							this.setState({searchQuery: event.target.value}); // TODO: this can/should be a lot better.
+						}}
 					/>
 				</div>
 
-				<Listings filters={{}}/>
+				<Listings filters={{status: LISTING_STATUS['AVAILABLE'], search: this.state.searchQuery}}/>
 			</div>
 		);
 	}

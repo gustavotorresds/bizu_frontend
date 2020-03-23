@@ -44,16 +44,16 @@ class Nav extends Component {
 			<BottomNavigation value={pathnameWithoutSlash} onChange={this.handleChange} className={classes.root} >
 				<BottomNavigationAction label="Explore" value="" icon={<SearchIcon />} />
 		
-				<BottomNavigationAction label="Store" value="store" icon={<AddBoxIcon />} />
+				<BottomNavigationAction label="Store" value="store/" icon={<AddBoxIcon />} />
 
 				{token ?
-					<BottomNavigationAction label="News" value="news" icon={<NotificationsIcon />} />
+					<BottomNavigationAction label="News" value="news/" icon={<NotificationsIcon />} />
 					:
 					null
 				}
 
 				{token ? 
-					<BottomNavigationAction label="Me" value="me" icon={<PersonIcon />}/>
+					<BottomNavigationAction label="Me" value="me/" icon={<PersonIcon />}/>
 					:
 					<BottomNavigationAction label="Log In" value="auth" icon={<PersonIcon />} />
 				}

@@ -5,8 +5,10 @@ import PersonIcon from '@material-ui/icons/Person';
 import StarRateIcon from '@material-ui/icons/StarRate';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
+import { Link , Route } from 'react-router-dom';
 
 import Listings from './Listings'
+import UpdateProfile from './UpdateProfile'
 import { UserContext } from './Constants'
 import './Me.scss';
 
@@ -65,7 +67,7 @@ class Me extends Component {
 						</div>
 					</div>
 
-					<button className="subtleButton">Edit Profile</button>
+					<Link to={'update/'}><button className="subtleButton">Edit Profile</button></Link>
 
 					<hr className="verticalDivisor"/>
 
@@ -87,6 +89,8 @@ class Me extends Component {
 						:
 						<Listings filters={{borrower: info.id}} />
 					}
+
+					<Route path={'/me/update'} component={UpdateProfile} />
 					
 				</div>
 			)}

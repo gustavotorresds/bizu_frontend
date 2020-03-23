@@ -1,0 +1,33 @@
+.notifications {
+	padding: 15px;
+	margin-top: 30px;
+
+	.notificationsContainer {
+		margin-top: 20px;
+
+		.notification {
+			display: flex;
+			flex-direction: column;
+
+			.content {
+				display: flex;
+
+				.icon {
+					width: 40px;
+					height: 40px;
+					padding: 5px;
+					display: flex;
+					justify-content: center;
+					align-items: center;
+					border-radius: 50%;
+					background-color: #C4C4C4;
+				}
+
+				.notificationMessage {
+					padding: 0 0 5px 10px;
+					font-size: 11pt;
+				}
+			}
+		}
+	}
+}

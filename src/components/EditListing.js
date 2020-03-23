@@ -11,7 +11,7 @@ import { DOMAIN } from './Constants.js';
 import './NewListing.scss';
 
 
-class NewListingP1 extends Component {
+class EditListingP1 extends Component {
 
 	constructor(props) {
 		super(props);
@@ -67,6 +67,15 @@ class NewListingP1 extends Component {
 			<div className="paragraph">After you finish, you can create other listings for other items you want to store/lend.</div>
 
 	        <div className="images">
+	        	{(values.pictures || []).map((picture, index) => {
+                	return (
+                		<div className="imgPreviewContainer" key={index}>
+	                    	<img className="imgPreview" src={picture.image} alt="..." />
+	                    	<div className="removeImg" onClick={() => this.props.removePic(index)}>&#10005;</div>
+                    	</div>
+	                )
+                })}
+
                 {(this.state.files || []).map((file, index) => {
                 	return (
                 		<div className="imgPreviewContainer" key={index}>
@@ -76,7 +85,7 @@ class NewListingP1 extends Component {
 	                )
                 })}
 
-                <div className="imgPreviewContainer" style={this.state.files.length === 0 ? {minWidth: "100%"} : {}}>
+                <div className="imgPreviewContainer" style={this.state.files.length + values.pictures.length === 0 ? {minWidth: "100%"} : {}}>
 					<label for="image-upload" className="uploadButton">
 						Add Photos
 					</label>
@@ -114,7 +123,7 @@ class NewListingP1 extends Component {
 	}
 }
 
-class NewListingP2 extends Component {
+class EditListingP2 extends Component {
 	render() {
 		const { values, handleChange } = this.props;
 
@@ -127,6 +136,7 @@ class NewListingP2 extends Component {
             		type="number"
             		placeholder="0"
             		className="number field"
+            		value={values.largeBoxes}
             		onChange={handleChange('largeBoxes')}/>
             	<div className="boxHelper">
             		<div className="boxTitle">Large Boxes</div>
@@ -139,6 +149,7 @@ class NewListingP2 extends Component {
             		type="number"
             		placeholder="0"
             		className="number field"
+            		value={values.mediumBoxes}
             		onChange={handleChange('mediumBoxes')}/>
             	<div className="boxHelper">
             		<div className="boxTitle">Medium Boxes</div>
@@ -151,6 +162,7 @@ class NewListingP2 extends Component {
             		type="number"
             		placeholder="0"
             		className="number field"
+            		value={values.smallBoxes}
             		onChange={handleChange('smallBoxes')}/>
             	<div className="boxHelper">
             		<div className="boxTitle">Small Boxes</div>
@@ -175,54 +187,7 @@ class NewListingP2 extends Component {
 	}
 }
 
-class NewListingP3 extends Component {
-	render() {
-		const { values } = this.props;
-
-		let msgArray = [];
-
-		if (values.smallBoxes > 0) {
-			msgArray.push(`${values.smallBoxes} Small Boxes`);
-		}
-
-		if (values.mediumBoxes > 0) {
-			msgArray.push(`${values.mediumBoxes} Medium Boxes`);
-		}
-
-		if (values.largeBoxes > 0) {
-			msgArray.push(`${values.largeBoxes} Large Boxes`);
-		}
-
-		let msg;
-		if (msgArray.length === 0) {
-			msg = 'no boxes';
-		} else {
-			msg = `${msgArray[msgArray.length - 1]}`;
-			
-			if (msgArray.length - 1 > 0) {
-				msg = `${msgArray[msgArray.length - 2]} and ${msg}`;
-			}
-
-			if (msgArray.length - 2 > 0) {
-				msg = `${msgArray[msgArray.length - 3]}, ${msg}`;
-			}
-		}
-
-		return (<div className="listingPage">
-			<div className="h1">
-				Sweet, you've just listed <b>{values.title}</b> along with {msg}.
-			</div>
-
-			<div className="h2">
-				<b>Next steps:</b><br/>
-				When someone is ready to store your things, they will reach out to you in one of the channels bellow. Make sure these are updated by going to the <b>Me</b> tab.
-			</div>
-
-		</div>);
-	}
-}
-
-class NewListing extends Component {
+class EditListing extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -241,13 +206,24 @@ class NewListing extends Component {
 	}
 
 	componentDidMount() {
-		// TODO: check if success
-		requester.post(`listings/`, { })
-		    .then(res => {
-				 console.log(res);
-				 console.log(res.data.id);
-				 this.setState({id: res.data.id});
-		    });
+		const listingId = this.props.match.params.id;
+
+		requester
+			.get(`listings/${listingId}/`)
+			.then(res => {
+				const {id, title, description, pictures, small_boxes, medium_boxes, large_boxes, other} = res.data;
+				this.setState({
+					id: id,
+					title: title,
+					description: description,
+					pictures: pictures,
+					smallBoxes: small_boxes,
+					mediumBoxes: medium_boxes,
+					largeBoxes: large_boxes,
+					other: other,
+					ready: true})
+			});
+			// TODO: what if error
 	}
 
 	handleOpen = () => {
@@ -255,14 +231,6 @@ class NewListing extends Component {
 	};
 
 	handleClose = () => {
-		const { id, step} = this.state;
-
-		if (step < 3) {
-			if (id !== null) {
-				requester.delete(`listings/${id}/`);
-			}
-		}
-
 		this.setState({open: false});
 		this.props.history.push(`/`);
 	};
@@ -270,6 +238,20 @@ class NewListing extends Component {
 	handleChange = input => e => {
 		this.setState({ [input]: e.target.value });
 	}
+
+	removePic = (index) => {
+		const pics = this.state.pictures;
+		const picId = pics[index].id;
+
+    	requester.delete(`${picId}/`)
+    		.then(res => {
+    			console.log(res);
+    			// TODO: state stuff
+
+    			pics.splice(index, 1);
+				this.setState({pictures: pics});
+    		});
+    }
 
 	handleSubmit = () => {
 		const { id, title, description, smallBoxes, mediumBoxes, largeBoxes, other } = this.state;
@@ -284,10 +266,8 @@ class NewListing extends Component {
 		})
 		.then(res => {
 			console.log(res.data);
-
-			// TODO: is this the best place to put?
-			// TODO: should have a loading screen somewhere.
-			this.nextStep();
+			this.setState({open: false});
+			this.props.history.push(`/`);
 		});
 	}
 
@@ -305,11 +285,9 @@ class NewListing extends Component {
 
 		switch(this.state.step) {
 			case 1:
-				return <NewListingP1 values={values} handleChange={this.handleChange} />;
-			case 2:
-				return <NewListingP2 values={values} handleChange={this.handleChange} />;
+				return <EditListingP1 values={values} handleChange={this.handleChange} removePic={this.removePic} />;
 			default:
-				return <NewListingP3 values={values} />;
+				return <EditListingP2 values={values} handleChange={this.handleChange} />;
 		}
 	}
 
@@ -343,21 +321,13 @@ class NewListing extends Component {
 		            
 		          	{this.renderPage()}
 
-		          	{this.state.step >= 2 ?
+		          	{this.state.step === 2 ?
 			            <div className="bottomContainer">
-			            	{this.state.step === 2 ?
-			            		<button
-			            			className="bottomButton primaryButton"
-			            			onClick={this.handleSubmit}>
-			            			Submit
-		            			</button>
-			            		:
-			            		<button
-			            			className="bottomButton secondaryButton"
-			            			onClick={this.handleClose}>
-			            			Done
-		            			</button>
-		            		}
+		            		<button
+		            			className="bottomButton primaryButton"
+		            			onClick={this.handleSubmit}>
+		            			Update
+	            			</button>		
 			            </div>
 			            :
 			            null
@@ -370,4 +340,4 @@ class NewListing extends Component {
 	}
 }
 
-export default withRouter(withStyles({ }, { withTheme: true })(NewListing));
+export default withRouter(withStyles({ }, { withTheme: true })(EditListing));

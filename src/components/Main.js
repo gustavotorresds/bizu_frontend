@@ -11,6 +11,7 @@ import Me from './Me';
 import Nav from './Nav';
 import NewListing from './NewListing';
 import Notifications from './Notifications';
+import ReportProblem from './ReportProblem';
 import requester from './Requester';
 import { UserContext } from './Constants'
 
@@ -61,11 +62,12 @@ class Main extends Component {
 				<ThemeProvider theme={theme}>
 					<UserContext.Provider value={this.state.userInfo}>
 						<Switch>
-							<Route exact path={["/", "/listings/", "/listings/:id/"]} ><Explore /></Route>
+							<Route exact path={["/", "/listings/", "/listings/:id/", "/listings/:id/edit/"]} ><Explore /></Route>
 							<Route path="/store"><NewListing/></Route>
-							<Route path="/me"><Me/></Route>
+							<Route path="/me/"><Me/></Route>
 							<Route path="/news"><Notifications/></Route>
 							<Route path="/auth"><Auth/></Route>
+							<Route path="/problem/:listingId/" component={ReportProblem} />
 						</Switch>
 						<Nav />
 					</UserContext.Provider>

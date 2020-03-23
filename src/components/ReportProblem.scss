@@ -1,0 +1,17 @@
+.reportProblem {
+	height: 100%;
+	background-color: #fff;
+
+	.fieldContainer {
+		padding: 15px;
+
+		.explanation {
+			margin-bottom: 15px;
+		}
+
+		.textField {
+			width: 100%;
+			padding: 10px;
+		}
+	}
+}

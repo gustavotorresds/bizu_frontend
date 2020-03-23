@@ -2,16 +2,15 @@ import React, { Component } from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
 
-import { withRouter } from 'react-router-dom';
+import { withRouter, Route, Link } from 'react-router-dom';
 import requester from './Requester.js';
 import {Carousel} from 'react-responsive-carousel';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import { Route, Link } from 'react-router-dom';
 
-import CustomModal from './CustomModal.js';
-import ContactInfo from './ContactInfo.js';
+import CustomModal from './CustomModal';
+import ContactInfo from './ContactInfo';
 
-import { LISTING_STATUS, UserContext } from './Constants.js';
+import { LISTING_STATUS, UserContext } from './Constants';
 
 import './Listing.scss';
 
@@ -128,6 +127,80 @@ class ActionableListing extends Component {
 		}       	
 	};
 
+	markInUse = () => {
+		const { info, userInfo } = this.props;
+
+		requester
+			.put(`listings/${info.id}/`, {
+				status: LISTING_STATUS['IN_USE']
+			})
+			.then(res => {
+				console.log(res.data);
+			});
+			// TODO: probably want to show something that indicates it went through. Maybe tooltip at bottom?
+	}
+
+	returnToOwner = () => {
+		const { info, userInfo } = this.props;
+
+		requester
+			.put(`listings/${info.id}/`, {
+				borrower: null,
+				status: LISTING_STATUS['HIDDEN'], // TODO: what's the ideal status or flow? Available?
+			})
+			.then(res => {
+				console.log(res.data);
+			});
+	}
+
+	nullifyBorrower = () => {
+		const { info, userInfo } = this.props;
+
+		requester
+			.put(`listings/${info.id}/`, {
+				borrower: null,
+				status: LISTING_STATUS['AVAILABLE'],
+			})
+			.then(res => {
+				console.log(res.data);
+			});
+	}
+
+	markAvailable = () => {
+		const { info, userInfo } = this.props;
+
+		requester
+			.put(`listings/${info.id}/`, {
+				status: LISTING_STATUS['AVAILABLE'],
+			})
+			.then(res => {
+				console.log(res.data);
+			});
+	}
+
+	hide = () => {
+		const { info, userInfo } = this.props;
+
+		requester
+			.put(`listings/${info.id}/`, {
+				status: LISTING_STATUS['HIDDEN'],
+			})
+			.then(res => {
+				console.log(res.data);
+			});	
+	}
+
+	delete = () => {
+		const { info, userInfo } = this.props;
+
+		requester
+			.delete(`listings/${info.id}/`)
+			.then(res => {
+				console.log(res.data);
+				// TODO: redirect to another page.
+			});	
+	}
+
 	displayActions = () => {
 		const { info, userInfo } = this.props;
 
@@ -136,17 +209,20 @@ class ActionableListing extends Component {
 				<div>What's the status?</div>
 				{info.status === LISTING_STATUS['RESERVED'] ?
 				<div>
-					<button className="subtleButton">Already Picked Up</button>
-					<button className="subtleButton">Returned to Me</button>
-					<button className="subtleButton">Never Picked Up</button>
-					<button className="subtleButton">I need someone else to store</button>
-					<button className="subtleButton">I'm having problems</button>
+					<button className="subtleButton" onClick={this.markInUse}>Already Picked Up</button>
+					<button className="subtleButton" onClick={this.returnToOwner}>Returned to Me</button>
+					<button className="subtleButton" onClick={this.nullifyBorrower}>Never Picked Up</button>
+					<Link to={`/problem/${info.id}`}><button className="subtleButton">I'm having problems</button></Link>
 				</div>
 				:
 				<div>
-					<button className="subtleButton">Update Listing</button>
-					<button className="subtleButton">Hide Listing</button>
-					<button className="subtleButton">Remove Listing</button>
+					<Link to="edit/"><button className="subtleButton">Update Listing</button></Link>
+					{info.status === LISTING_STATUS['HIDDEN'] ?
+						<button className="subtleButton" onClick={this.markAvailable}>Make Listing Available</button>
+						:
+						<button className="subtleButton" onClick={this.hide}>Hide Listing</button>}
+					}
+					<button className="subtleButton" onClick={this.delete}>Remove Listing</button>
 				</div>
 				}
 			</div>);
@@ -155,17 +231,17 @@ class ActionableListing extends Component {
 				<div>What's the status?</div>
 				{info.status === LISTING_STATUS['RESERVED'] ?
 				<div>
-					<button className="subtleButton">Already Picked Up</button>
-					<button className="subtleButton">Returned to Owner</button>
-					<button className="subtleButton">Never Picked Up</button>
-					<button className="subtleButton">I need someone else to store</button>
-					<button className="subtleButton">I'm having problems</button>
+					<button className="subtleButton" onClick={this.markInUse}>Already Picked Up</button>
+					<button className="subtleButton" onClick={this.returnToOwner}>Returned to Owner</button>
+					<button className="subtleButton" onClick={this.nullifyBorrower}>Never Picked Up</button>
+					<button className="subtleButton" onClick={this.markAvailable}>I need someone else to store</button>
+					<Link to={`/problem/${info.id}`}><button className="subtleButton">I'm having problems</button></Link>
 				</div>
 				:
 				<div>
-					<button className="subtleButton">Returned to Owner</button>
-					<button className="subtleButton">I need someone else to store</button>
-					<button className="subtleButton">I'm having problems</button>
+					<button className="subtleButton" onClick={this.returnToOwner}>Returned to Owner</button>
+					<button className="subtleButton" onClick={this.markAvailable}>I need someone else to store</button>
+					<Link to={`/problem/${info.id}`}><button className="subtleButton">I'm having problems</button></Link>
 				</div>
 				}
 			</div>);
@@ -304,7 +380,7 @@ class Listing extends Component {
 				>
 					{this.state.ready ?
 					<div className="completeListing">
-						{info.status !== LISTING_STATUS['ACTIVE'] || userInfo.id === info.owner ?
+						{info.status !== LISTING_STATUS['AVAILABLE'] || userInfo.id === info.owner ?
 							<ActionableListing userInfo={userInfo} info={info} />
 							:
 							<div>

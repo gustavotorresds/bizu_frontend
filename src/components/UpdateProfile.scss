@@ -1,0 +1,46 @@
+.updateProfile {
+	height: 100%;
+	background-color: #fff;
+
+	.iconContainer {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		margin: 15px 0;
+
+		.icon {
+			width: 70px;
+			height: 70px;
+			border-radius: 50%;
+			padding: 7px;
+			background-color: #C4C4C4;
+		}
+	}
+
+	.fieldContainer {
+		display: flex;
+		padding: 5px 15px;
+		align-items: center;
+
+		.label {
+			width: 80px;
+			line-height: 100%;
+			font-size: 12pt;
+			color: #828282;
+		}
+
+		.textField {
+			flex-grow: 1;
+			padding: 5px;
+			border: none;
+			font-size: 12pt;
+		}
+	}
+
+	.note {
+		color: #828282;
+		font-size: 11pt;
+		margin-top: 20px;
+		padding: 0 15px;
+	}
+}
