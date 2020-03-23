@@ -11,16 +11,70 @@ import { Route, Link } from 'react-router-dom';
 import CustomModal from './CustomModal.js';
 import ContactInfo from './ContactInfo.js';
 
-import { LISTING_STATUS } from './Constants.js';
+import { LISTING_STATUS, UserContext } from './Constants.js';
 
 import './Listing.scss';
 
 class ListingP1 extends Component {
+	contactInfo = () => {
+		const { info, userInfo } = this.props;
+		
+		if (userInfo.id === info.owner) {
+			return null; // TODO: replace with borrower, if borrowed
+		} else {
+			return (<ContactInfo userId={info.owner} />);
+		}       	
+	};
+
+	displayInstructions = () => {
+		const { info, userInfo } = this.props;
+		
+		if (userInfo.id === info.owner) { // TODO: and if borrowed
+			return (<div>
+				<div>If you haven't coordinated the pick-up yet, here's a message that you can copy-paste to send them:</div>
+				{/* TODO: replace User Name with actual name*/}
+				<div>"Hi User Name! I just saw on Bizu that you want to borrow my Item Title. I'd love to lend it to you. When would it be a good time for you to pick them up?"</div>
+			</div>); 
+		} else { // TODO: if borrowed
+			return (<div>
+				<div>If you haven't coordinated the pick-up yet, here's a message that you can copy-paste to send them:</div>
+				<div>"Hi User Name! I just saw the Item Title you posted on Bizu. I'd love to store it along with your boxes. When would it be a good time to pick them up?"</div>
+			</div>);
+		}       	
+	};
+
+	displayActions = () => {
+		const { info, userInfo } = this.props;
+
+		if (userInfo.id !== info.owner) { // TODO: and diff from borrower
+			return null;
+		}
+
+		return (<div>
+			<div>What's the status?</div>
+			{info.status === LISTING_STATUS['RESERVED'] ?
+			<div>
+				<button className="subtleButton">Already Picked Up</button>
+				<button className="subtleButton">Returned to Owner</button>
+				<button className="subtleButton">Never Picked Up</button>
+				<button className="subtleButton">I need someone else to store</button>
+				<button className="subtleButton">I'm having problems</button>
+			</div>
+			:
+			<div>
+				<button className="subtleButton">Update Listing</button>
+				<button className="subtleButton">Hide Listing</button>
+				<button className="subtleButton">Remove Listing</button>
+			</div>
+			}
+		</div>);
+	}
+
 	render() {
-		const { info } = this.props;
+		const { info, userInfo } = this.props;
 
 		return (
-			<div className="completeListing">
+			<div className={'completeListing' + (userInfo.id !== info.owner && ' bottomContainerPadding')}>
 				<Carousel showArrows={false} showStatus={false} showThumbs={false}>
 				    {info.pictures.map((pic, index) => (
 			            <div
@@ -49,16 +103,12 @@ class ListingP1 extends Component {
 			        	{info.description}
 			        </div>
 
-			        <ContactInfo userId={info.owner} />
-		        </div>
+			        {this.contactInfo()}
 
-		        <div className="bottomContainer">
-		        	<button
-		        		className="bottomButton primaryButton"
-		        		onClick={() => this.reserveListing()}
-	        		>
-		        		Reserve
-		        	</button>
+			        {this.displayInstructions()}
+
+			        {this.displayActions()}
+			        
 		        </div>
 			</div>
 		);
@@ -149,49 +199,61 @@ class Listing extends Component {
 			});
 	}
 
-	renderStep(info) {
-		if (!this.state.ready) {
-			return <div>Loading</div>;
+	renderStep(userInfo, info) {
+		if (this.state.step === 1) {
+			return <ListingP1 userInfo={userInfo} info={info} />
+		} else {
+			return <ListingP2 userInfo={userInfo} info={info} />
+		}
+	}
+
+	renderBottomContainer(userInfo, info) {
+		if (userInfo.id === info.owner) {
+			return null;
 		}
 
-		if (this.state.step === 1) {
-			return <ListingP1 info={info} />
-		} else {
-			return <ListingP2 info={info} />
-		}
+		return (<div className="bottomContainer">
+			{this.state.step === 1 ?
+			<button
+        		className="bottomButton primaryButton"
+        		onClick={() => this.reserveListing()}
+    		>
+        		Reserve
+        	</button>
+        	:
+        	<button
+        		className="bottomButton secondaryButton"
+        		onClick={() => this.handleClose()}
+    		>
+        		Done
+        	</button>
+			}
+        </div>);
 	}
 
 	render() {
 		const { info } = this.state;
-		console.log(info);
 
 		return (
-			<CustomModal
-				open={this.state.open}
-				onClose={this.state.handleClose}
-			>
-				<div className="completeListing">
-					{this.renderStep(info)}
-
-					<div className="bottomContainer">
-						{this.state.step === 1 ?
-						<button
-			        		className="bottomButton primaryButton"
-			        		onClick={() => this.reserveListing()}
-		        		>
-			        		Reserve
-			        	</button>
-			        	:
-			        	<button
-			        		className="bottomButton secondaryButton"
-			        		onClick={() => this.handleClose()}
-		        		>
-			        		Done
-			        	</button>
-						}
+			<UserContext.Consumer>
+			{userInfo => (
+				<CustomModal
+					open={this.state.open}
+					onClose={this.state.handleClose}
+				>
+					{this.state.ready ?
+					<div className="completeListing">
+						{this.renderStep(userInfo, info)}
+						
+						{this.renderBottomContainer(userInfo, info)}
 			        </div>
-		        </div>
-			</CustomModal>
+			        :
+			        <div>Loading</div>
+			  	  }
+				</CustomModal>
+
+			)}
+			</UserContext.Consumer>
 		);
 	}
 }

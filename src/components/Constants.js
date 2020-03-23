@@ -1,3 +1,5 @@
+import React from 'react';
+
 const LISTING_STATUS = {
 	AVAILABLE: 0,
 	RESERVED: 1,
@@ -5,4 +7,8 @@ const LISTING_STATUS = {
 	HIDDEN: 3,
 }
 
-export { LISTING_STATUS };
+const UserContext = React.createContext({
+  userInfo: null,
+});
+
+export { LISTING_STATUS, UserContext };

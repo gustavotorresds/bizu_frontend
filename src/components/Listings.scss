@@ -1,0 +1,19 @@
+.listings {
+	padding: 0;
+
+	.listing {
+		.thumbnail {
+			max-width: 100%;
+			max-height: 100%;
+			border-radius: 5px;
+		}
+
+		.title {
+			font-size: 14pt;
+		}
+
+		.boxes {
+			font-size: 6pt;
+		}
+	}
+}

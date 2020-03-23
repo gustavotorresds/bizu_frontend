@@ -11,6 +11,8 @@ import Me from './Me';
 import Nav from './Nav';
 import NewListing from './NewListing';
 import Notifications from './Notifications';
+import requester from './Requester';
+import { UserContext } from './Constants'
 
 import './Main.scss';
 
@@ -24,24 +26,49 @@ const theme = createMuiTheme({
 class Main extends Component {
 	constructor(props) {
 	    super(props);
-	    this.state = {
-	    	
+	    this.state = { // TODO: this is prob not the right thing to do, but fixes errors.
+	    	userInfo: {
+	    		id: 0,
+				firstName: '',
+				lastName: '',
+				email: '',
+				profile: {
+					facebook: '',
+					linkedin: ''
+				}
+			},
+		}
+	}
+
+	componentDidMount() {
+		const token = localStorage.getItem('token');
+
+		if (token) {
+			requester
+				.get('users/me/')
+				.then(res => {
+					console.log(res.data);
+					this.setState({userInfo: res.data});
+				});
 		}
 	}
 
 	render() {
+		const { userInfo } = this.state;
 
 		return (
 			<Router>
 				<ThemeProvider theme={theme}>
-					<Switch>
-						<Route exact path={["/", "/listings/", "/listings/:id/"]} ><Explore filters={{owner: 1}}/></Route>
-						<Route path="/store"><NewListing/></Route>
-						<Route path="/me"><Me/></Route>
-						<Route path="/news"><Notifications/></Route>
-						<Route path="/auth"><Auth/></Route>
-					</Switch>
-					<Nav />
+					<UserContext.Provider value={this.state.userInfo}>
+						<Switch>
+							<Route exact path={["/", "/listings/", "/listings/:id/"]} ><Explore /></Route>
+							<Route path="/store"><NewListing/></Route>
+							<Route path="/me"><Me/></Route>
+							<Route path="/news"><Notifications/></Route>
+							<Route path="/auth"><Auth/></Route>
+						</Switch>
+						<Nav />
+					</UserContext.Provider>
 				</ThemeProvider>
 			</Router>
 		);
