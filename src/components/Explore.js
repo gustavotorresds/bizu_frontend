@@ -35,7 +35,7 @@ class Explore extends Component {
 					/>
 				</div>
 
-				<Listings/>
+				<Listings filters={{}}/>
 			</div>
 		);
 	}

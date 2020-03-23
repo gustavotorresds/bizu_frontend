@@ -16,26 +16,111 @@ import { LISTING_STATUS, UserContext } from './Constants.js';
 import './Listing.scss';
 
 class ListingP1 extends Component {
+	render() {
+		const { info, userInfo } = this.props;
+
+		return (
+			<div className={'completeListing' + (userInfo.id !== info.owner && ' bottomContainerPadding')}>
+				<Carousel showArrows={false} showStatus={false} showThumbs={false}>
+				    {info.pictures.map((pic, index) => (
+			            <div
+			                key={index}
+			                className="thumbnail"
+			            >
+			            	<img src={pic.image} />
+			            </div>
+			        ))}
+		        </Carousel>
+
+		        <div className="closeListing"><Link to="/">&#10005;</Link></div>
+
+		        <div className="info">
+			        <div className="title">
+			        	{info.title}
+			        </div>
+
+			        <div className="boxes">
+			        	<div className="box">{info.small_boxes} Small Boxes</div>
+			        	<div className="box">{info.medium_boxes} Medium Boxes</div>
+			        	<div className="box">{info.large_boxes} Large Boxes</div>
+			        </div>
+
+			        <div className="description displayLinebreak">
+			        	{info.description}
+			        </div>
+
+			        <ContactInfo userId={info.owner} />
+		        </div>
+			</div>
+		);
+	}
+}
+
+class ListingP2 extends Component {
+	render() {
+		const { info } = this.props;
+
+		return (
+			<div>
+				<Carousel showArrows={false} showStatus={false} showThumbs={false}>
+				    {info.pictures.map((pic, index) => (
+			            <div
+			                key={index}
+			                className="thumbnail"
+			            >
+			            	<img src={pic.image} />
+			            </div>
+			        ))}
+		        </Carousel>
+
+		        <div className="info">
+			        <div className="h1">Sweet, you've just reserved <b>{info.title}</b>.</div>.
+
+			        <div className="h2 mt30">
+			        <b>Next steps:</b><br/>
+			        To coordinate the pick-up, reach out to the owner bellow.
+			        </div>
+
+			        <ContactInfo userId={info.owner} />
+
+			        <div className="paragraph mt30">
+			        Here's an example message that you can copy-paste to send them:
+			        </div>
+
+			        <div className="paragraphS mt15">
+			        "Hi User Name! I just saw the Item Title you posted on Bizu. I'd love to store it along with your boxes. When would it be a good time to pick them up?”
+			        </div>
+		        </div>
+			</div>
+		);
+	}
+}
+
+class ActionableListing extends Component {
 	contactInfo = () => {
 		const { info, userInfo } = this.props;
 		
 		if (userInfo.id === info.owner) {
-			return null; // TODO: replace with borrower, if borrowed
+			if (info.status === LISTING_STATUS['RESERVED'] || info.status === LISTING_STATUS['IN_USE']) {
+				return (<ContactInfo userId={info.borrower} />);	
+			}
 		} else {
 			return (<ContactInfo userId={info.owner} />);
-		}       	
+		}
+
+		return null;
 	};
 
 	displayInstructions = () => {
 		const { info, userInfo } = this.props;
 		
-		if (userInfo.id === info.owner) { // TODO: and if borrowed
+		if (userInfo.id === info.owner && info.status === LISTING_STATUS['RESERVED']) {
 			return (<div>
 				<div>If you haven't coordinated the pick-up yet, here's a message that you can copy-paste to send them:</div>
 				{/* TODO: replace User Name with actual name*/}
 				<div>"Hi User Name! I just saw on Bizu that you want to borrow my Item Title. I'd love to lend it to you. When would it be a good time for you to pick them up?"</div>
 			</div>); 
-		} else { // TODO: if borrowed
+		} else if (info.borrower === userInfo.id) {
 			return (<div>
 				<div>If you haven't coordinated the pick-up yet, here's a message that you can copy-paste to send them:</div>
 				<div>"Hi User Name! I just saw the Item Title you posted on Bizu. I'd love to store it along with your boxes. When would it be a good time to pick them up?"</div>
@@ -46,28 +131,47 @@ class ListingP1 extends Component {
 	displayActions = () => {
 		const { info, userInfo } = this.props;
 
-		if (userInfo.id !== info.owner) { // TODO: and diff from borrower
-			return null;
+		if (userInfo.id === info.owner) { // TODO: logic gets weird when you consider IN_USE.
+			return (<div>
+				<div>What's the status?</div>
+				{info.status === LISTING_STATUS['RESERVED'] ?
+				<div>
+					<button className="subtleButton">Already Picked Up</button>
+					<button className="subtleButton">Returned to Me</button>
+					<button className="subtleButton">Never Picked Up</button>
+					<button className="subtleButton">I need someone else to store</button>
+					<button className="subtleButton">I'm having problems</button>
+				</div>
+				:
+				<div>
+					<button className="subtleButton">Update Listing</button>
+					<button className="subtleButton">Hide Listing</button>
+					<button className="subtleButton">Remove Listing</button>
+				</div>
+				}
+			</div>);
+		} else if (userInfo.id === info.borrower) {
+			return (<div>
+				<div>What's the status?</div>
+				{info.status === LISTING_STATUS['RESERVED'] ?
+				<div>
+					<button className="subtleButton">Already Picked Up</button>
+					<button className="subtleButton">Returned to Owner</button>
+					<button className="subtleButton">Never Picked Up</button>
+					<button className="subtleButton">I need someone else to store</button>
+					<button className="subtleButton">I'm having problems</button>
+				</div>
+				:
+				<div>
+					<button className="subtleButton">Returned to Owner</button>
+					<button className="subtleButton">I need someone else to store</button>
+					<button className="subtleButton">I'm having problems</button>
+				</div>
+				}
+			</div>);
 		}
 
-		return (<div>
-			<div>What's the status?</div>
-			{info.status === LISTING_STATUS['RESERVED'] ?
-			<div>
-				<button className="subtleButton">Already Picked Up</button>
-				<button className="subtleButton">Returned to Owner</button>
-				<button className="subtleButton">Never Picked Up</button>
-				<button className="subtleButton">I need someone else to store</button>
-				<button className="subtleButton">I'm having problems</button>
-			</div>
-			:
-			<div>
-				<button className="subtleButton">Update Listing</button>
-				<button className="subtleButton">Hide Listing</button>
-				<button className="subtleButton">Remove Listing</button>
-			</div>
-			}
-		</div>);
+		return null;
 	}
 
 	render() {
@@ -115,46 +219,6 @@ class ListingP1 extends Component {
 	}
 }
 
-class ListingP2 extends Component {
-	render() {
-		const { info } = this.props;
-
-		return (
-			<div>
-				<Carousel showArrows={false} showStatus={false} showThumbs={false}>
-				    {info.pictures.map((pic, index) => (
-			            <div
-			                key={index}
-			                className="thumbnail"
-			            >
-			            	<img src={pic.image} />
-			            </div>
-			        ))}
-		        </Carousel>
-
-		        <div className="info">
-			        <div className="h1">Sweet, you've just reserved <b>{info.title}</b>.</div>.
-
-			        <div className="h2 mt30">
-			        <b>Next steps:</b><br/>
-			        To coordinate the pick-up, reach out to the owner bellow.
-			        </div>
-
-			        <ContactInfo userId={info.owner} />
-
-			        <div className="paragraph mt30">
-			        Here's an example message that you can copy-paste to send them:
-			        </div>
-
-			        <div className="paragraphS mt15">
-			        "Hi User Name! I just saw the Item Title you posted on Bizu. I'd love to store it along with your boxes. When would it be a good time to pick them up?”
-			        </div>
-		        </div>
-			</div>
-		);
-	}
-}
-
 class Listing extends Component {
 	constructor(props) {
 		super(props);
@@ -186,12 +250,13 @@ class Listing extends Component {
 	}
 
 
-	reserveListing = () => {
+	reserveListing = (userInfo) => {
 		const listingId = this.props.match.params.id;
 
 		requester
 			.put(`listings/${listingId}/`, {
 				status: LISTING_STATUS['RESERVED'],
+				borrower: userInfo.id
 			})
 			.then(res => {
 				console.log(res.data);
@@ -208,15 +273,11 @@ class Listing extends Component {
 	}
 
 	renderBottomContainer(userInfo, info) {
-		if (userInfo.id === info.owner) {
-			return null;
-		}
-
 		return (<div className="bottomContainer">
 			{this.state.step === 1 ?
 			<button
         		className="bottomButton primaryButton"
-        		onClick={() => this.reserveListing()}
+        		onClick={() => this.reserveListing(userInfo)}
     		>
         		Reserve
         	</button>
@@ -243,9 +304,14 @@ class Listing extends Component {
 				>
 					{this.state.ready ?
 					<div className="completeListing">
-						{this.renderStep(userInfo, info)}
-						
-						{this.renderBottomContainer(userInfo, info)}
+						{info.status !== LISTING_STATUS['ACTIVE'] || userInfo.id === info.owner ?
+							<ActionableListing userInfo={userInfo} info={info} />
+							:
+							<div>
+								{this.renderStep(userInfo, info)}
+								{this.renderBottomContainer(userInfo, info)}
+							</div>
+						}
 			        </div>
 			        :
 			        <div>Loading</div>

@@ -25,6 +25,9 @@ class Listings extends Component {
 		}
 	}
 
+
+	// TODO: there's a prob a better way to make this work without having to repeat
+	// the same code here and in componentWillReceiveProps().
 	componentDidMount() {
 		const { filters } = this.props;
 
@@ -45,7 +48,27 @@ class Listings extends Component {
 			});
 	}
 
-	render () {
+	componentWillReceiveProps(nextProps) {
+		const { filters } = nextProps;
+
+		let query = '';
+		// TODO: see if there's a cleaner way to do this.
+		if (filters) {
+			query += '?'
+			for (let key in filters) {
+				query += (`${key}=${filters[key]}&`);
+			}
+			query = query.substring(0, query.length - 1); // remove last &.
+			console.log(query);
+		}
+
+		requester.get(`listings/${query}`)
+			.then(res => {
+				this.setState({listings: res.data})
+			});
+	}
+
+	render() {
 		const { listings } = this.state;
 
 		return (

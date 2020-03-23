@@ -20,12 +20,12 @@ class Me extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			activeTab: 'lent',
+			activeTab: 'borrowed',
 		}
 	}
 
 	handleChange = (event, newValue) => {
-		this.setState({activeTab: newValue})
+		this.setState({activeTab: newValue});
 	};
 
 	render() {
@@ -65,7 +65,7 @@ class Me extends Component {
 						</div>
 					</div>
 
-					<button className="editButton">Edit Profile</button>
+					<button className="subtleButton">Edit Profile</button>
 
 					<hr className="verticalDivisor"/>
 
@@ -85,7 +85,7 @@ class Me extends Component {
 					{this.state.activeTab === 'lent' ?
 						<Listings filters={{owner: info.id}} />
 						:
-						null
+						<Listings filters={{borrower: info.id}} />
 					}
 					
 				</div>
